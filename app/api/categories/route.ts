@@ -18,6 +18,7 @@ export async function POST(req: NextRequest) {
     await connectToMongoDB();
     const body = await req.json();
     const { name, slug, status, parent, metaTitle, metaDescription, metaKeyword } = body;
+    
 
     if (!name || !slug) {
       return NextResponse.json({ success: false, message: "Name and slug are required" }, { status: 400 });

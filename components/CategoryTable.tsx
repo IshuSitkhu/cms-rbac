@@ -75,73 +75,100 @@ export default function CategoryTable({ canEdit = false, canDelete = false }: Pr
   };
 
   return (
-    <div>
-      <h2>Categories</h2>
+    <div className="bg-white p-4 rounded-lg shadow-md space-y-4">
+      <h2 className="text-xl font-semibold text-gray-800">Categories</h2>
 
-      <div>
+      {/* Add/Edit Form */}
+      <div className="flex flex-wrap gap-2 items-center">
         <input
           placeholder="Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="border p-1"
+          className="border text-gray-700 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
         <input
           placeholder="Slug"
           value={slug}
           onChange={(e) => setSlug(e.target.value)}
-          className="border p-1"
+          className="border text-gray-700 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
         {editingCategory ? (
-          <button onClick={handleUpdate}>
+          <button
+            onClick={handleUpdate}
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition"
+          >
             Update
           </button>
         ) : (
-          <button onClick={handleAdd}>
+          <button
+            onClick={handleAdd}
+            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition"
+          >
             Add
           </button>
         )}
       </div>
 
-      <table className="w-full border">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="p-2 border">Name</th>
-            <th className="p-2 border">Slug</th>
-            <th className="p-2 border">Status</th>
-            {canEdit && <th className="p-2 border">Edit</th>}
-            {canDelete && <th className="p-2 border">Delete</th>}
-          </tr>
-        </thead>
-        <tbody>
-          {categories.map((cat) => (
-            <tr key={cat._id}>
-              <td className="p-2 border">{cat.name}</td>
-              <td className="p-2 border">{cat.slug}</td>
-              <td className="p-2 border">{cat.status}</td>
-              {canEdit && (
-                <td className="p-2 border">
-                  <button
-                    className="bg-blue-500 text-white px-2 py-1 rounded"
-                    onClick={() => handleEdit(cat)}
-                  >
-                    Edit
-                  </button>
-                </td>
-              )}
-              {canDelete && (
-                <td className="p-2 border">
-                  <button
-                    className="bg-red-500 text-white px-2 py-1 rounded"
-                    onClick={() => handleDelete(cat._id)}
-                  >
-                    Delete
-                  </button>
-                </td>
-              )}
+      {/* Table */}
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200 border rounded">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Name</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Slug</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
+              {canEdit && <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Edit</th>}
+              {canDelete && <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Delete</th>}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="divide-y divide-gray-200">
+            {categories.length === 0 && (
+              <tr>
+                <td colSpan={canEdit && canDelete ? 5 : 3} className="px-6 py-4 text-center text-gray-500">
+                  No categories found.
+                </td>
+              </tr>
+            )}
+            {categories.map((cat) => (
+              <tr key={cat._id} className="hover:bg-gray-50">
+                <td className="px-6 py-3 text-gray-800">{cat.name}</td>
+                <td className="px-6 py-3 text-gray-800">{cat.slug}</td>
+                <td className="px-6 py-3">
+                  <span
+                    className={`px-2 py-1 rounded-full text-sm font-medium ${
+                      cat.status === "active"
+                        ? "bg-green-100 text-green-800"
+                        : "bg-red-100 text-red-800"
+                    }`}
+                  >
+                    {cat.status}
+                  </span>
+                </td>
+                {canEdit && (
+                  <td className="px-6 py-3">
+                    <button
+                      className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm"
+                      onClick={() => handleEdit(cat)}
+                    >
+                      Edit
+                    </button>
+                  </td>
+                )}
+                {canDelete && (
+                  <td className="px-6 py-3">
+                    <button
+                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm"
+                      onClick={() => handleDelete(cat._id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
