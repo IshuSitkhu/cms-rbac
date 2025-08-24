@@ -17,6 +17,9 @@ interface Props {
 
 export default function CategoryTable({ canEdit = false, canDelete = false }: Props) {
   const [categories, setCategories] = useState<Category[]>([]);
+  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+  const [name, setName] = useState("");
+  const [slug, setSlug] = useState("");
 
   const fetchCategories = async () => {
     const res = await fetch("/api/categories");
@@ -30,15 +33,75 @@ export default function CategoryTable({ canEdit = false, canDelete = false }: Pr
 
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete?")) return;
-
     const res = await fetch(`/api/categories/${id}`, { method: "DELETE" });
     const data = await res.json();
     if (data.success) fetchCategories();
   };
 
+  const handleEdit = (cat: Category) => {
+    setEditingCategory(cat);
+    setName(cat.name);
+    setSlug(cat.slug);
+  };
+
+  const handleUpdate = async () => {
+    if (!editingCategory) return;
+    const res = await fetch(`/api/categories/${editingCategory._id}`, {
+      method: "PUT",
+      body: JSON.stringify({ name, slug }),
+      headers: { "Content-Type": "application/json" },
+    });
+    const data = await res.json();
+    if (data.success) {
+      setEditingCategory(null);
+      setName("");
+      setSlug("");
+      fetchCategories();
+    } else alert(data.message);
+  };
+
+  const handleAdd = async () => {
+    const res = await fetch("/api/categories", {
+      method: "POST",
+      body: JSON.stringify({ name, slug }),
+      headers: { "Content-Type": "application/json" },
+    });
+    const data = await res.json();
+    if (data.success) {
+      setName("");
+      setSlug("");
+      fetchCategories();
+    } else alert(data.message);
+  };
+
   return (
     <div>
-      <h2 className="text-xl font-bold mb-4">Categories</h2>
+      <h2>Categories</h2>
+
+      <div>
+        <input
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="border p-1"
+        />
+        <input
+          placeholder="Slug"
+          value={slug}
+          onChange={(e) => setSlug(e.target.value)}
+          className="border p-1"
+        />
+        {editingCategory ? (
+          <button onClick={handleUpdate}>
+            Update
+          </button>
+        ) : (
+          <button onClick={handleAdd}>
+            Add
+          </button>
+        )}
+      </div>
+
       <table className="w-full border">
         <thead>
           <tr className="bg-gray-200">
@@ -59,7 +122,7 @@ export default function CategoryTable({ canEdit = false, canDelete = false }: Pr
                 <td className="p-2 border">
                   <button
                     className="bg-blue-500 text-white px-2 py-1 rounded"
-                    onClick={() => alert(`Edit ${cat.name}`)}
+                    onClick={() => handleEdit(cat)}
                   >
                     Edit
                   </button>

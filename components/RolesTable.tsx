@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 interface Role {
   _id: string;
   name: string;
-  permissions: string[];
+  permissions: { resource: string; action: string }[];
 }
 
 interface Props {
@@ -23,7 +23,10 @@ export default function RolesTable({ canEdit = false, canDelete = false }: Props
   };
 
   useEffect(() => {
-    fetchRoles();
+    const loadRoles = async () => {
+      await fetchRoles();
+    };
+    loadRoles();
   }, []);
 
   const handleDelete = async (id: string) => {
@@ -46,11 +49,13 @@ export default function RolesTable({ canEdit = false, canDelete = false }: Props
             {canDelete && <th className="p-2 border">Delete</th>}
           </tr>
         </thead>
-        {/* <tbody>
+        <tbody>
           {roles.map((role) => (
             <tr key={role._id}>
               <td className="p-2 border">{role.name}</td>
-              <td className="p-2 border">{role.permissions.join(", ")}</td>
+              <td className="p-2 border">
+                {role.permissions.map((p) => `${p.resource}:${p.action}`).join(", ")}
+              </td>
               {canEdit && (
                 <td className="p-2 border">
                   <button
@@ -73,29 +78,7 @@ export default function RolesTable({ canEdit = false, canDelete = false }: Props
               )}
             </tr>
           ))}
-        </tbody> */}
-
-        <tbody>
-  {roles.map((role) => (
-    <tr key={role._id}>
-      <td className="p-2 border">{role.name}</td>
-      <td className="p-2 border">
-        {role.permissions.map((p: any) => `${p.resource}:${p.action}`).join(", ")}
-      </td>
-      {canEdit && (
-        <td className="p-2 border">
-          <button className="bg-blue-500 text-white px-2 py-1 rounded" onClick={() => alert(`Edit ${role.name}`)}>Edit</button>
-        </td>
-      )}
-      {canDelete && (
-        <td className="p-2 border">
-          <button className="bg-red-500 text-white px-2 py-1 rounded" onClick={() => handleDelete(role._id)}>Delete</button>
-        </td>
-      )}
-    </tr>
-  ))}
-</tbody>
-
+        </tbody>
       </table>
     </div>
   );

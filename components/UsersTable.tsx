@@ -6,7 +6,7 @@ interface User {
   _id: string;
   username: string;
   email: string;
-  roles: string[];
+  roles: { name: string }[];
 }
 
 interface Props {
@@ -24,7 +24,10 @@ export default function UsersTable({ canEdit = false, canDelete = false }: Props
   };
 
   useEffect(() => {
-    fetchUsers();
+    const loadUsers = async () => {
+      await fetchUsers();
+    };
+    loadUsers();
   }, []);
 
   const handleDelete = async (id: string) => {
@@ -48,12 +51,12 @@ export default function UsersTable({ canEdit = false, canDelete = false }: Props
             {canDelete && <th className="p-2 border">Delete</th>}
           </tr>
         </thead>
-        {/* <tbody>
+        <tbody>
           {users.map((user) => (
             <tr key={user._id}>
               <td className="p-2 border">{user.username}</td>
               <td className="p-2 border">{user.email}</td>
-              <td className="p-2 border">{user.roles.join(", ")}</td>
+              <td className="p-2 border">{user.roles.map((r) => r.name).join(", ")}</td>
               {canEdit && (
                 <td className="p-2 border">
                   <button
@@ -76,29 +79,7 @@ export default function UsersTable({ canEdit = false, canDelete = false }: Props
               )}
             </tr>
           ))}
-        </tbody> */}
-
-            <tbody>
-  {users.map((user) => (
-    <tr key={user._id}>
-      <td>{user.username}</td>
-      <td>{user.email}</td>
-      <td>{user.roles.map((r: any) => r.name).join(", ")}</td>
-      {canEdit && (
-        <td>
-          <button>Edit</button>
-        </td>
-      )}
-      {canDelete && (
-        <td>
-          <button>Delete</button>
-        </td>
-      )}
-    </tr>
-  ))}
-</tbody>
-
-
+        </tbody>
       </table>
     </div>
   );

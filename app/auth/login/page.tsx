@@ -1,15 +1,18 @@
-"use client"; // If you use client-side hooks like useState, useEffect
+"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import './login.css';
 
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const res = await fetch("/api/auth/login", {
         method: "POST",
@@ -18,19 +21,19 @@ export default function LoginPage() {
       });
       const data = await res.json();
       if (data.success) {
-        // Save token if needed
         localStorage.setItem("token", data.data.token);
-        router.push("/dashboard"); // redirect after login
+        router.push("/dashboard");
       } else {
         alert(data.message);
       }
     } catch (err) {
       console.error(err);
     }
+    setLoading(false);
   };
 
   return (
-    <div>
+    <div className="login-container">
       <h1>Login</h1>
       <form onSubmit={handleLogin}>
         <input
@@ -47,7 +50,9 @@ export default function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Login</button>
+        <button type="submit" disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
+        </button>
       </form>
     </div>
   );
