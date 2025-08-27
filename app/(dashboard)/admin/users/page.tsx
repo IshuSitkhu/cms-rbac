@@ -4,7 +4,7 @@ import UsersTable from "@/components/UsersTable";
 
 export default function UsersPage() {
   return (
-    <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900 ">
       <AdminSidebar />
 
       <main className="flex-1 ml-64 pt-16 pr-60">

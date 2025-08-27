@@ -78,7 +78,7 @@ export default function CategoryTable({ canEdit = false, canDelete = false }: Pr
     <div className=" dark:bg-gray-700 p-4 rounded-lg shadow-md space-y-4">
       <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Categories</h2>
 
-      {/* Add/Edit Form */}
+      {/* Add/Edit Form
       <div className="flex flex-wrap gap-2 items-center">
         <input
           placeholder="Name"
@@ -107,7 +107,7 @@ export default function CategoryTable({ canEdit = false, canDelete = false }: Pr
             Add
           </button>
         )}
-      </div>
+      </div> */}
 
       {/* Table */}
       <div className="overflow-x-auto">
