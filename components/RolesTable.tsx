@@ -42,7 +42,7 @@ export default function RolesTable({ canEdit = false, canDelete = false }: Props
       <h2 className="text-xl font-bold mb-4">Roles</h2>
       <table className="w-full border">
         <thead>
-          <tr className="bg-gray-200">
+          <tr>
             <th className="p-2 border">Role Name</th>
             <th className="p-2 border">Permissions</th>
             {canEdit && <th className="p-2 border">Edit</th>}

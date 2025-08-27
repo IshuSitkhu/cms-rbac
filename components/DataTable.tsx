@@ -16,7 +16,7 @@ export default function DataTable({ data, columns, onEdit, onDelete }: Props) {
   return (
     <table className="w-full border">
       <thead>
-        <tr className="bg-gray-200">
+        <tr>
           {columns.map((col) => (
             <th key={col.key} className="p-2 border">{col.header}</th>
           ))}

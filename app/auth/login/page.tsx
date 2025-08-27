@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -13,31 +12,49 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+
     try {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
+
       const data = await res.json();
+
       if (data.success) {
         localStorage.setItem("token", data.data.token);
-        router.push("/dashboard");
+
+        // Normalize roles to lowercase
+        const roles = data.data.user.roles.map((r: any) => r.name.toLowerCase());
+
+        // Role-based redirection
+        if (roles.includes("admin")) {
+          router.push("/admin");
+        } else if (roles.includes("editor")) {
+          router.push("/editor");
+        } else if (roles.includes("viewer")) {
+          router.push("/viewer");
+        } else {
+          alert("No dashboard assigned for your role!");
+        }
+
       } else {
         alert(data.message);
       }
+
     } catch (err) {
       console.error(err);
+      alert("Login failed. Check console for details.");
     }
+
     setLoading(false);
   };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-          Login
-        </h1>
+        <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">Login</h1>
         <form onSubmit={handleLogin} className="space-y-4">
           <input
             type="email"

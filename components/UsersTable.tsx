@@ -43,7 +43,7 @@ export default function UsersTable({ canEdit = false, canDelete = false }: Props
       <h2 className="text-xl font-bold mb-4">Users</h2>
       <table className="w-full border">
         <thead>
-          <tr className="bg-gray-200">
+          <tr>
             <th className="p-2 border">Username</th>
             <th className="p-2 border">Email</th>
             <th className="p-2 border">Roles</th>

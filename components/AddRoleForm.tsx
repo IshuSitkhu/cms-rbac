@@ -30,9 +30,27 @@ export default function AddRoleForm({ onAdded }: Props) {
 
   return (
     <form onSubmit={handleSubmit} className="mb-4 flex gap-2 flex-wrap">
-      <input type="text" placeholder="Role Name" value={name} onChange={(e) => setName(e.target.value)} className="border p-1 rounded" required />
-      <input type="text" placeholder="Permissions (comma separated)" value={permissions} onChange={(e) => setPermissions(e.target.value)} className="border p-1 rounded" />
-      <button type="submit" className="bg-green-500 text-white px-2 py-1 rounded">Add Role</button>
+      <input
+        type="text"
+        placeholder="Role Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        className="border p-1 rounded dark:bg-gray-700 dark:text-white"
+        required
+      />
+      <input
+        type="text"
+        placeholder="Permissions (comma separated)"
+        value={permissions}
+        onChange={(e) => setPermissions(e.target.value)}
+        className="border p-1 rounded dark:bg-gray-700 dark:text-white"
+      />
+      <button
+        type="submit"
+        className="bg-green-500 hover:bg-green-600 px-2 py-1 rounded transition"
+      >
+        Add Role
+      </button>
     </form>
   );
 }
