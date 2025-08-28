@@ -41,5 +41,9 @@ export default function DashboardPage() {
     }
   }, [router]);
 
-  return <p className="p-4 text-center mt-24 text-gray-700 dark:text-gray-200">Redirecting...</p>;
+  return (
+  <p className="mt-24 text-center text-lg font-medium text-gray-700 dark:text-gray-200 animate-pulse  ">
+    Redirecting...
+  </p>
+);
 }

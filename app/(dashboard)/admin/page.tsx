@@ -35,9 +35,9 @@ import AdminSidebar from "@/components/AdminSidebar";
 
 export default function AdminDashboardPage() {
   return (
-    <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900 pt-16">
+    <div className="flex min-h-screen bg-gradient-to-r  via-indigo-600 pt-16">
       <AdminSidebar />
-      <main className="flex-1 ml-64 pt-16">
+      <main className="flex-1 ml-6 pt-16">
         <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
           Admin Dashboard
         </h1>

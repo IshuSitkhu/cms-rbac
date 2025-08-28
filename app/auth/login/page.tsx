@@ -52,45 +52,49 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">Login</h1>
-        <form onSubmit={handleLogin} className="space-y-4">
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 transition"
-          >
-            {loading ? "Logging in..." : "Login"}
-          </button>
-        </form>
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-r  via-indigo-600 ">
+  <div className="w-full max-w-md rounded-3xl p-10 bg-white/90 backdrop-blur-md shadow-2xl border border-white/20">
+    <h1 className="text-3xl font-extrabold text-gray-900 mb-8 text-center tracking-wide">
+      Welcome Back
+    </h1>
 
-        <p className="mt-4 text-center text-gray-600">
-          Don’t have an account?{" "}
-          <span
-            onClick={() => router.push("/auth/signup")}
-            className="text-blue-600 hover:underline cursor-pointer"
-          >
-            Register
-          </span>
-        </p>
-      </div>
-    </div>
+    <form onSubmit={handleLogin} className="space-y-6">
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+        className="w-full px-5 py-3 border border-gray-300 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+        className="w-full px-5 py-3 border border-gray-300 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+      />
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 active:bg-indigo-800 disabled:bg-gray-400 transition-all shadow-md"
+      >
+        {loading ? "Logging in..." : "Login"}
+      </button>
+    </form>
+
+    <p className="mt-6 text-center text-gray-700">
+      Don’t have an account?{" "}
+      <span
+        onClick={() => router.push("/auth/signup")}
+        className="text-indigo-600 hover:underline cursor-pointer font-medium"
+      >
+        Register
+      </span>
+    </p>
+  </div>
+</div>
+
   );
 }

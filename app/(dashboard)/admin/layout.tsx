@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
     
-      <main className="flex-1 ml-64 p-6">{children}</main>
+      <main className="flex-1 ml-64 p-6 bg-gradient-to-r  via-indigo-600">{children}</main>
     
   );
 }

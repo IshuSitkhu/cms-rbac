@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 
 interface Role {
@@ -11,9 +10,10 @@ interface Role {
 interface Props {
   canEdit?: boolean;
   canDelete?: boolean;
+  setEditRole?: (role: Role) => void;
 }
 
-export default function RolesTable({ canEdit = false, canDelete = false }: Props) {
+export default function RolesTable({ canEdit = false, canDelete = false, setEditRole }: Props) {
   const [roles, setRoles] = useState<Role[]>([]);
 
   const fetchRoles = async () => {
@@ -34,26 +34,26 @@ export default function RolesTable({ canEdit = false, canDelete = false }: Props
     if (data.success) fetchRoles();
   };
 
-   return (
+  return (
     <div className="mb-6">
       <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Roles</h2>
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white dark:bg-gray-800 rounded-lg shadow divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-gray-100 dark:bg-gray-700">
+        <table className="min-w-full text-black bg-white rounded-xl shadow-lg divide-y divide-gray-200 dark:divide-gray-700">
+          <thead className="bg-white text-black rounded-t-xl">
             <tr>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-200 uppercase tracking-wider">Role Name</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-200 uppercase tracking-wider">Permissions</th>
-              {canEdit && <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-200 uppercase tracking-wider">Edit</th>}
-              {canDelete && <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-200 uppercase tracking-wider">Delete</th>}
+              <th className="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">Role Name</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">Permissions</th>
+              {canEdit && <th className="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">Edit</th>}
+              {canDelete && <th className="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">Delete</th>}
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
             {roles.map((role) => (
-              <tr key={role._id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-100 font-medium">{role.name}</td>
-                <td className="px-6 py-4 text-gray-700 dark:text-gray-300">
+              <tr key={role._id} className="hover:bg-gray-50 dark:hover:bg-gray-200 transition-colors">
+                <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-black font-medium">{role.name}</td>
+                <td className="px-6 py-4 text-black dark:text-gray-300">
                   {role.permissions.map((p) => (
-                    <span key={`${p.resource}-${p.action}`} className="inline-block bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-100 text-xs px-2 py-1 rounded mr-1 mb-1">
+                    <span key={`${p.resource}-${p.action}`} className="inline-block bg-gray-200 dark:text-black text-xs px-2 py-1 rounded mr-1 mb-1">
                       {p.resource}:{p.action}
                     </span>
                   ))}
@@ -62,7 +62,7 @@ export default function RolesTable({ canEdit = false, canDelete = false }: Props
                   <td className="px-6 py-4">
                     <button
                       className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded transition"
-                      onClick={() => alert(`Edit ${role.name}`)}
+                      onClick={() => setEditRole && setEditRole(role)}
                     >
                       Edit
                     </button>

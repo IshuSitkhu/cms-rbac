@@ -9,11 +9,11 @@ export default function CategoriesPage() {
   const refreshTables = () => setRefreshKey(prev => prev + 1);
 
   return (
-    <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900 bg-gradient-to-r  via-indigo-600">
       <AdminSidebar />
       <main className="flex-1 ml-64 pt-16 pr-60">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Categories</h2>
-        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow p-6">
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow p-6 ">
           <AddCategoryForm onAdded={refreshTables} />
           <CategoryTable key={refreshKey} canEdit canDelete />
         </div>

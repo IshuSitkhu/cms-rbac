@@ -20,7 +20,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Fallback if metadata.icons is not used */}
         <link rel="icon" href="/favicon.ico" />
       </head>
 

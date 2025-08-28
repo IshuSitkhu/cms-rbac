@@ -30,13 +30,13 @@ export default function AddCategoryForm({ onAdded }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mb-4 flex gap-2 flex-wrap">
+    <form onSubmit={handleSubmit} className="mb-4 p-8 flex gap-2 flex-wrap bg-white">
       <input
         type="text"
         placeholder="Name"
         value={name}
         onChange={(e) => setName(e.target.value)}
-    className="border dark:bg-gray-700 text-gray-900 dark:text-white px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+    className="border  text-gray-900 dark:text-black px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
         required
       />
       <input
@@ -44,13 +44,13 @@ export default function AddCategoryForm({ onAdded }: Props) {
         placeholder="Slug"
         value={slug}
         onChange={(e) => setSlug(e.target.value)}
-    className="border dark:bg-gray-700 text-gray-900 dark:text-white px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+    className="border  text-gray-900 dark:text-black px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
         required
       />
       <select
         value={status}
         onChange={(e) => setStatus(e.target.value)}
-    className="border dark:bg-gray-700 text-gray-900 dark:text-white px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+    className="border  text-gray-900 dark:text-black px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
       >
         <option value="active">Active</option>
         <option value="inactive">Inactive</option>

@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect } from "react";
 
 interface Permission {
@@ -10,15 +9,16 @@ interface Permission {
 
 interface Props {
   onAdded: () => void;
+  editRole?: any;
+  setEditRole?: (role: any) => void;
 }
 
-export default function AddRoleForm({ onAdded }: Props) {
+export default function AddRoleForm({ onAdded, editRole, setEditRole }: Props) {
   const [name, setName] = useState("");
   const [permissions, setPermissions] = useState<Permission[]>([]);
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
   const [openResource, setOpenResource] = useState<string | null>(null);
 
-  // Fetch permissions
   useEffect(() => {
     const fetchPermissions = async () => {
       try {
@@ -32,12 +32,21 @@ export default function AddRoleForm({ onAdded }: Props) {
     fetchPermissions();
   }, []);
 
-  // Group permissions by resource
   const groupedPermissions = permissions.reduce((acc: any, perm) => {
     if (!acc[perm.resource]) acc[perm.resource] = [];
     acc[perm.resource].push(perm);
     return acc;
   }, {});
+
+  useEffect(() => {
+    if (editRole) {
+      setName(editRole.name);
+      setSelectedPermissions(editRole.permissions.map((p: any) => p._id));
+    } else {
+      setName("");
+      setSelectedPermissions([]);
+    }
+  }, [editRole]);
 
   const handleCheckboxChange = (id: string) => {
     setSelectedPermissions(prev =>
@@ -50,10 +59,8 @@ export default function AddRoleForm({ onAdded }: Props) {
     const alreadySelected = allIds.every((id: string) => selectedPermissions.includes(id));
 
     if (alreadySelected) {
-      // Deselect all
       setSelectedPermissions(prev => prev.filter(id => !allIds.includes(id)));
     } else {
-      // Select all
       setSelectedPermissions(prev => [...new Set([...prev, ...allIds])]);
     }
   };
@@ -63,15 +70,26 @@ export default function AddRoleForm({ onAdded }: Props) {
     if (!name) return alert("Role name is required");
 
     try {
-      const res = await fetch("/api/roles", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, permissions: selectedPermissions }),
-      });
+      let res;
+      if (editRole) {
+        res = await fetch(`/api/roles/${editRole._id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, permissions: selectedPermissions }),
+        });
+      } else {
+        res = await fetch("/api/roles", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, permissions: selectedPermissions }),
+        });
+      }
+
       const data = await res.json();
       if (data.success) {
         setName("");
         setSelectedPermissions([]);
+        if (setEditRole) setEditRole(null);
         onAdded();
       } else {
         alert(data.message);
@@ -83,33 +101,32 @@ export default function AddRoleForm({ onAdded }: Props) {
 
   return (
     <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow space-y-4">
-      <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Add New Role</h3>
+      <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+        {editRole ? "Edit Role" : "Add New Role"}
+      </h3>
 
-      {/* Role Name Input */}
       <input
         type="text"
         placeholder="Role Name"
         value={name}
         onChange={e => setName(e.target.value)}
-        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 dark:bg-white dark:text-black dark:border-gray-600"
         required
       />
 
-      {/* Permissions Dropdowns */}
       <div className="border rounded-lg p-3 bg-gray-50 dark:bg-gray-700 max-h-80 overflow-y-auto">
         {Object.keys(groupedPermissions).map(resource => (
           <div key={resource} className="mb-2">
             <button
               type="button"
               onClick={() => setOpenResource(openResource === resource ? null : resource)}
-              className="w-full flex justify-between items-center px-3 py-2 bg-gray-200 dark:bg-gray-600 rounded hover:bg-gray-300 dark:hover:bg-gray-500 focus:outline-none"
+              className="w-full flex justify-between items-center px-3 py-2 bg-gray-200 dark:bg-gray-600 rounded  focus:outline-none"
             >
-              <span className="font-semibold text-gray-800 dark:text-gray-200">{resource}</span>
+              <span className="font-semibold text-white-800 dark:text-white-200">{resource}</span>
               <span>{openResource === resource ? "▲" : "▼"}</span>
             </button>
             {openResource === resource && (
               <div className="mt-2 pl-4 grid grid-cols-1 gap-1">
-                {/* Select / Deselect All */}
                 <button
                   type="button"
                   onClick={() => handleSelectAll(resource)}
@@ -117,9 +134,7 @@ export default function AddRoleForm({ onAdded }: Props) {
                 >
                   {groupedPermissions[resource].every((p: Permission) =>
                     selectedPermissions.includes(p._id)
-                  )
-                    ? "Deselect All"
-                    : "Select All"}
+                  ) ? "Deselect All" : "Select All"}
                 </button>
 
                 {groupedPermissions[resource].map((perm: Permission) => (
@@ -142,12 +157,11 @@ export default function AddRoleForm({ onAdded }: Props) {
         ))}
       </div>
 
-      {/* Submit Button */}
       <button
         type="submit"
         className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg shadow transition"
       >
-        Add Role
+        {editRole ? "Update Role" : "Add Role"}
       </button>
     </form>
   );
